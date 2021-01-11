@@ -6,6 +6,10 @@ import { AppComponent } from './app.component';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDatabase } from './in-memory-database';
 import { HttpClientModule } from '@angular/common/http';
+import { CategoriesModule } from './pages/categories/categories.module';
+import { CategoriesRoutingModule } from './pages/categories/categories-routing.module';
+
+
 
 @NgModule({
   declarations: [
@@ -15,7 +19,10 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    HttpClientInMemoryWebApiModule.forRoot(InMemoryDatabase)
+    HttpClientInMemoryWebApiModule.forRoot(InMemoryDatabase),
+    CategoriesModule,
+    CategoriesRoutingModule,
+
     
   ],
   providers: [

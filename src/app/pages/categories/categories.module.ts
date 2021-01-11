@@ -13,6 +13,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     CategoriesRoutingModule,
     ReactiveFormsModule
+    
   ]
 })
 export class CategoriesModule { }

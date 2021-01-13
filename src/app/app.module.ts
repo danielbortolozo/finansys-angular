@@ -8,6 +8,8 @@ import { InMemoryDatabase } from './in-memory-database';
 import { HttpClientModule } from '@angular/common/http';
 import { CategoriesModule } from './pages/categories/categories.module';
 import { CategoriesRoutingModule } from './pages/categories/categories-routing.module';
+import { EntriesModule } from './pages/entries/entries.module';
+import { EntriesRoutingModule } from './pages/entries/entries-routing.module';
 
 
 
@@ -22,6 +24,8 @@ import { CategoriesRoutingModule } from './pages/categories/categories-routing.m
     HttpClientInMemoryWebApiModule.forRoot(InMemoryDatabase),
     CategoriesModule,
     CategoriesRoutingModule,
+    EntriesModule,
+    EntriesRoutingModule
 
     
   ],

@@ -10,6 +10,8 @@ import { CategoriesModule } from './pages/categories/categories.module';
 import { CategoriesRoutingModule } from './pages/categories/categories-routing.module';
 import { EntriesModule } from './pages/entries/entries.module';
 import { EntriesRoutingModule } from './pages/entries/entries-routing.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 
 
@@ -25,7 +27,9 @@ import { EntriesRoutingModule } from './pages/entries/entries-routing.module';
     CategoriesModule,
     CategoriesRoutingModule,
     EntriesModule,
-    EntriesRoutingModule
+    EntriesRoutingModule,
+    BrowserAnimationsModule,
+    BsDatepickerModule.forRoot()   
 
     
   ],

@@ -1,11 +1,13 @@
-import { Component, OnInit, AfterContentChecked } from '@angular/core';
+import { Component, OnInit, AfterContentChecked, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, Validators, FormGroup } from '@angular/forms'
 import { ActivatedRoute, Router } from "@angular/router";
 import { switchMap } from 'rxjs/operators';
 import { Entry } from '../shared/entry.model';
 import { EntryService } from '../shared/entry.service';
 import  toastr from 'toastr';
-
+import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
+import { CategoryService } from '../../categories/shared/category.service';
+import { Category } from '../../categories/shared/category.model';
 
 
 @Component({
@@ -14,6 +16,7 @@ import  toastr from 'toastr';
   styleUrls: ['./entry-form.component.css']
 })
 export class EntryFormComponent implements OnInit {
+  @ViewChild(BsDatepickerDirective, { static: false }) datepicker: BsDatepickerDirective;
 
   currentAction: string;
   entryForm: FormGroup;
@@ -21,18 +24,31 @@ export class EntryFormComponent implements OnInit {
   serverErrorsMessages: string[] = null;
   submittingForm: boolean = false;
   entry: Entry = new Entry();
+  model;
+  categories: Array<Category>;
+
+  imaskConfig = {
+    mask: Number,
+    scale: 2,
+    thousandsSeparator: '',
+    padFractionalZeros: true,
+    normalizeZeros: true,
+    radix: ','    
+  };
 
   constructor(
     private entryService: EntryService,
     private route: ActivatedRoute,
     private router: Router,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private categoryService: CategoryService
   ) { }
 
   ngOnInit(): void {
     this.setCurrentAction();
     this.buildEntryForm();
     this.loadEntry();
+    this.loadCategories();
   }
 
   ngAfterContentChecked() {
@@ -52,6 +68,16 @@ export class EntryFormComponent implements OnInit {
 
   }
 
+  get typeOptions(): Array<any> {
+    return Object.entries(Entry.types).map(
+      ([value, text]) => {
+        return {
+          text: text,
+          value: value
+        }
+      }
+    ) 
+  }
 
   //private métodos
   private setCurrentAction(){
@@ -63,17 +89,17 @@ export class EntryFormComponent implements OnInit {
    
   private buildEntryForm() {
     this.entryForm = this.formBuilder.group({
+           
       id: [null],
       name: [null, [Validators.required, Validators.minLength(2)]],
       description: [null],
-      type: [null, [Validators.required]],
+      type: ["expense", [Validators.required]],
       amount: [null, [Validators.required]],
-      data: [null, [Validators.required]],
-      paid: [null, [Validators.required]],
+      data: [null, ],
+      paid: [true, [Validators.required]],
       categoryId: [null, [Validators.required]]
 
-
-    });
+    });    
   }
   private loadEntry() {
     if (this.currentAction == "edit") {    
@@ -90,6 +116,11 @@ export class EntryFormComponent implements OnInit {
     }
   } 
 
+  private loadCategories(){
+     this.categoryService.getAll().subscribe(
+       categories => this.categories = categories
+     );
+  }
   private setPageTitle() {
     if (this.currentAction == 'new')
       this.pageTitle = 'Cadastro de novo lançamento.'
@@ -111,8 +142,11 @@ export class EntryFormComponent implements OnInit {
   }
 
   private updateEntry() {
+    
     const entry: Entry = Object.assign(new Entry(), this.entryForm.value);
 
+    console.log('log updateEntry:'+entry.paid)
+    console.log('Dtat :'+entry.date)
     this.entryService.update(entry)
     .subscribe(
       entry => this.actionsForSuccess(entry),

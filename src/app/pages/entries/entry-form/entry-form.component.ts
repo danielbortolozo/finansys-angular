@@ -71,6 +71,7 @@ export class EntryFormComponent implements OnInit {
   get typeOptions(): Array<any> {
     return Object.entries(Entry.types).map(
       ([value, text]) => {
+        console.log('entrei no typeOptions....', value)
         return {
           text: text,
           value: value
